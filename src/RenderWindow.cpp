@@ -42,13 +42,17 @@ RenderWindow::RenderWindow
     // member instantiation
     QWidget(NULL),
     directedEdgeSurface(newDirectedEdgeSurface),
-    renderParameters(newRenderParameters)
+    renderParameters(newRenderParameters),
+    level(0), vertex_count(0)
     { // RenderWindow::RenderWindow()
     // set the window's title
     setWindowTitle(QString(windowName));
     
     // initialise the grid layout
     windowLayout = new QGridLayout(this);
+
+    // create button fort subdivision
+    subdivisionButton           = new QPushButton               ("subdivision",         this);
     
     // create all of the widgets, starting with the custom render widgets
     renderWidget                = new RenderWidget              (newDirectedEdgeSurface,     newRenderParameters,        this);
@@ -76,11 +80,13 @@ RenderWindow::RenderWindow
     yTranslateLabel             = new QLabel                    ("Y",                   this);
     zoomLabel                   = new QLabel                    ("Zm",                  this);
     vertexSizeLabel				= new QLabel					("Vertex Size",			this);
+    levelLabel                  = new QLabel                    ("level=0",             this);
+    vertexCountLabel            = new QLabel                    ("0 vertices",          this);
     
     // add all of the widgets to the grid               Row         Column      Row Span    Column Span
     
     // the top two widgets have to fit to the widgets stack between them
-    int nStacked = 6;
+    int nStacked = 9;
     
     windowLayout->addWidget(renderWidget,               0,          1,          nStacked,   1           );
     windowLayout->addWidget(yTranslateSlider,           0,          2,          nStacked,   1           );
@@ -93,6 +99,9 @@ RenderWindow::RenderWindow
     windowLayout->addWidget(modelRotatorLabel,          3,          3,          1,          1           );
     windowLayout->addWidget(flatNormalsBox,		        4,          3,          1,          1           );
     windowLayout->addWidget(showVerticesBox,	        5,          3,          1,          1           );
+    windowLayout->addWidget(subdivisionButton,          6,          3,          1,          1           );
+    windowLayout->addWidget(levelLabel,                 7,          3,          1,          1           );
+    windowLayout->addWidget(vertexCountLabel,           8,          3,          1,          1           );
 
     // Translate Slider Row
     windowLayout->addWidget(xTranslateSlider,           nStacked,   1,          1,          1           );
@@ -138,6 +147,12 @@ void RenderWindow::ResetInterface()
 	vertexSizeSlider		->setMaximum		(512);
 	vertexSizeSlider		->setValue			(512 * renderParameters -> vertexSize);
 
+    // update level text
+    levelLabel->setText(("level=" + std::to_string(level)).c_str());
+
+    // update texture text
+    vertexCountLabel->setText((std::to_string(vertex_count) + " vertices").c_str());
+
     // now flag them all for update 
     renderWidget            ->update();
     modelRotator            ->update();
@@ -148,4 +163,6 @@ void RenderWindow::ResetInterface()
     vertexSizeSlider        ->update();
     showVerticesBox		    ->update();
     flatNormalsBox		    ->update();
+    levelLabel              ->update();
+    vertexCountLabel        ->update();
     } // RenderWindow::ResetInterface()

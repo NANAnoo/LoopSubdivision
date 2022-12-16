@@ -82,6 +82,10 @@ class RenderController : public QObject
     
     // slots for responding to widget manipulations
     void MouseDown(int whichButton, int x, int y);
+
+    // slot for subdivision
+    void subdivisionTriggerd();
+
     // note that Continue & End assume the button has already been set
     void MouseDrag(int x, int y);
     void MouseUp(int x, int y);

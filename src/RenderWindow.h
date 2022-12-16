@@ -47,6 +47,9 @@ class RenderWindow : public QWidget
     // window layout    
     QGridLayout                 *windowLayout;
 
+    // subdivision button
+    QPushButton                 *subdivisionButton;
+
     // custom widgets
     ArcBallWidget               *modelRotator;
     ArcBallWidget               *lightRotator;
@@ -71,6 +74,8 @@ class RenderWindow : public QWidget
     QLabel                      *yTranslateLabel;
     QLabel                      *zoomLabel;
 	QLabel						*vertexSizeLabel;
+    QLabel						*levelLabel;
+    QLabel						*vertexCountLabel;
 	
     public:
     // constructor
@@ -88,6 +93,12 @@ class RenderWindow : public QWidget
     // sets every visual control to match the model
     // gets called by the controller after each change in the model
     void ResetInterface();
+
+    // a value that record current subdivision level
+    unsigned int level;
+
+    // a value that record current vertices count in the mesh
+    unsigned int vertex_count;
 
     // declare the render controller class a friend so it can access the UI elements
     friend class RenderController;

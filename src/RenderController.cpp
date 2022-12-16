@@ -79,9 +79,15 @@ RenderController::RenderController
     QObject::connect(   renderWindow->showVerticesBox, 		        SIGNAL(stateChanged(int)),
                         this,                                       SLOT(showVerticesCheckChanged(int)));
 
+    // subdivision button
+    QObject::connect(   renderWindow->subdivisionButton,            SIGNAL(released()),
+                        this,                                       SLOT(subdivisionTriggerd()));
+
     // copy the rotation matrix from the widgets to the model
     renderParameters->rotationMatrix = renderWindow->modelRotator->RotationMatrix();
     renderParameters->lightMatrix = renderWindow->lightRotator->RotationMatrix();
+    renderWindow->vertex_count = directedEdgeSurface->getVertexCount();
+    renderWindow->ResetInterface();
     } // RenderController::RenderController()
 
 // slot for responding to arcball rotation for object
@@ -185,6 +191,15 @@ void RenderController::flatNormalsCheckChanged(int state)
     renderWindow->ResetInterface();
     } // RenderController::flatNormalsCheckChanged()
      
+void RenderController::subdivisionTriggerd()
+    { // RenderController::subdivisionTriggerd()
+        // perform subdivision
+        directedEdgeSurface->loopSubdivisionLocally();
+        renderWindow->level ++;
+        renderWindow->vertex_count = directedEdgeSurface->getVertexCount();
+        renderWindow->ResetInterface();
+    }
+
 // slots for responding to mouse manipulation
 // these are general purpose signals which pass the mouse moves to the controller
 // after scaling to the notional unit sphere
